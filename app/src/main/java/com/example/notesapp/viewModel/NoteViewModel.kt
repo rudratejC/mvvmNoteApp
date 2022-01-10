@@ -4,21 +4,24 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
+import com.example.notesapp.model.Note
+import com.example.notesapp.model.NoteRepository
+import com.example.notesapp.model.NoteRoomDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class NoteViewModel(application: Application):AndroidViewModel(application) {
 
-    val repository:NoteRepository
+    val repository: NoteRepository
     val allNotes:LiveData<List<Note>>
 
     init {
-        val dao=NoteRoomDatabase.getDatabase(application).noteDao()
-        repository=NoteRepository(dao)
+        val dao= NoteRoomDatabase.getDatabase(application).noteDao()
+        repository= NoteRepository(dao)
         allNotes=repository.allNotes
     }
 
-    fun deleteNote(note:Note)=viewModelScope.launch(Dispatchers.IO) {
+    fun deleteNote(note: Note)=viewModelScope.launch(Dispatchers.IO) {
         repository.delete(note)
     }
 
